@@ -23,7 +23,7 @@ export const ensureCustomerProfile = async (user, extra = {}) => {
       totalOrders: 0,
       totalSpent: 0,
       addresses: [],
-      isAdmin: false,
+      isAdmin: false,  
       createdAt: serverTimestamp(),
       lastOrderAt: null
     });

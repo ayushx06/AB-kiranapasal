@@ -1,19 +1,21 @@
 import { create } from 'zustand';
 import toast from 'react-hot-toast';
-import { adminEmailLogin, getAdminStatus, logoutUser, sendPhoneOtp, verifyPhoneOtp } from '../firebase/auth';
+import { adminEmailLogin, ensureCustomerProfile, logoutUser, sendPhoneOtp, verifyPhoneOtp } from '../firebase/auth';
 
 export const useAuthStore = create((set) => ({
   user: null,
+  profile: null,
   isAdmin: false,
   loading: true,
   error: null,
   confirmationResult: null,
+  pendingName: '',
   setUser: async (user) => {
-    const isAdmin = user ? await getAdminStatus(user.uid) : false;
-    set({ user, isAdmin, loading: false });
+    const profile = user ? await ensureCustomerProfile(user) : null;
+    set({ user, profile, isAdmin: profile?.isAdmin === true, loading: false });
   },
-  loginWithPhone: async (phone) => {
-    set({ loading: true, error: null });
+  loginWithPhone: async (phone, name = '') => {
+    set({ loading: true, error: null, pendingName: name.trim() });
     try {
       const confirmationResult = await sendPhoneOtp(phone);
       set({ confirmationResult, loading: false });
@@ -25,15 +27,17 @@ export const useAuthStore = create((set) => ({
       throw error;
     }
   },
-  verifyOTP: async (code) => {
-    const { confirmationResult } = useAuthStore.getState();
+  verifyOTP: async (code, name = '') => {
+    const { confirmationResult, pendingName } = useAuthStore.getState();
     if (!confirmationResult) throw new Error('Please request OTP first.');
     set({ loading: true, error: null });
     try {
-      const user = await verifyPhoneOtp(confirmationResult, code);
-      const isAdmin = await getAdminStatus(user.uid);
-      set({ user, isAdmin, loading: false, confirmationResult: null });
-      toast.success('Logged in successfully');
+      const customerName = name.trim() || pendingName || 'Customer';
+      const user = await verifyPhoneOtp(confirmationResult, code, { name: customerName });
+      const profileSnap = await ensureCustomerProfile(user);
+      const profile = profileSnap.data();
+      set({ user, profile, isAdmin: profile?.isAdmin === true, loading: false, confirmationResult: null, pendingName: '' });
+      toast.success(`Welcome, ${profile?.name || customerName}`);
       return user;
     } catch (error) {
       set({ error: error.message, loading: false });
@@ -45,9 +49,10 @@ export const useAuthStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const credential = await adminEmailLogin(email, password);
-      const isAdmin = await getAdminStatus(credential.user.uid);
-      if (!isAdmin) throw new Error('This account is not an admin.');
-      set({ user: credential.user, isAdmin, loading: false });
+      const profileSnap = await ensureCustomerProfile(credential.user);
+      const profile = profileSnap.data();
+      if (profile?.isAdmin !== true) throw new Error('This account is not an admin.');
+      set({ user: credential.user, profile, isAdmin: true, loading: false });
       return credential.user;
     } catch (error) {
       set({ error: error.message, loading: false });
@@ -57,6 +62,7 @@ export const useAuthStore = create((set) => ({
   },
   logout: async () => {
     await logoutUser();
-    set({ user: null, isAdmin: false });
+    set({ user: null, profile: null, isAdmin: false, confirmationResult: null, pendingName: '' });
+    toast.success('Logged out successfully');
   }
 }));

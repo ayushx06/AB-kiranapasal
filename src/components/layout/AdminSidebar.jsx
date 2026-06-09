@@ -1,32 +1,70 @@
-import { BarChart3, Bike, Boxes, LayoutDashboard, LogOut, Users } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { Home, LayoutDashboard, LogOut, Package, ShoppingBag, Store, Truck, Users } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 
 const links = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/products', label: 'Products', icon: Boxes },
-  { to: '/admin/orders', label: 'Orders', icon: BarChart3 },
+  { to: '/admin/products', label: 'Products', icon: Package },
+  { to: '/admin/orders', label: 'Orders', icon: ShoppingBag },
   { to: '/admin/customers', label: 'Customers', icon: Users },
-  { to: '/admin/delivery', label: 'Delivery', icon: Bike }
+  { to: '/admin/delivery', label: 'Delivery', icon: Truck }
 ];
 
 export const AdminSidebar = () => {
-  const logout = useAuthStore((state) => state.logout);
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
+
   return (
-    <aside className="border-b border-slate-200 bg-white p-3 md:min-h-screen md:w-64 md:border-b-0 md:border-r">
-      <div className="mb-4 px-2 text-lg font-extrabold text-slate-950">Admin</div>
-      <nav className="flex gap-2 overflow-x-auto md:flex-col">
+    <aside className="flex w-full shrink-0 flex-col bg-slate-900 text-white shadow-xl md:h-screen md:w-64">
+      <div className="flex items-center gap-3 border-b border-slate-700/50 px-6 py-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 shadow-lg shadow-brand-900/30">
+          <Store className="h-5 w-5 text-white" />
+        </div>
+        <div>
+          <p className="text-sm font-extrabold leading-tight text-white">Abhishek Kirana</p>
+          <p className="text-xs text-slate-400">Admin Panel</p>
+        </div>
+      </div>
+
+      <nav className="flex gap-2 overflow-x-auto px-3 py-4 md:flex-1 md:flex-col md:space-y-1 md:overflow-y-auto">
         {links.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} end={to === '/admin'} to={to} className={({ isActive }) => `flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${isActive ? 'bg-brand-500 text-white' : 'text-slate-600 hover:bg-brand-50'}`}>
-            <Icon className="h-4 w-4" />
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/admin'}
+            className={({ isActive }) =>
+              `flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-brand-500 text-white shadow-sm shadow-brand-900/30'
+                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              }`
+            }
+          >
+            <Icon className="h-5 w-5 shrink-0" />
             {label}
           </NavLink>
         ))}
-        <button className="flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-brand-50" onClick={logout}>
-          <LogOut className="h-4 w-4" />
+      </nav>
+
+      <div className="flex gap-2 border-t border-slate-700/50 px-3 py-4 md:flex-col md:space-y-1">
+        <NavLink
+          to="/"
+          className="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-400 transition-all hover:bg-slate-800 hover:text-white"
+        >
+          <Home className="h-5 w-5" />
+          View Store
+        </NavLink>
+        <button
+          onClick={() => {
+            logout();
+            navigate('/');
+          }}
+          className="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-400 transition-all hover:bg-red-900/20 hover:text-red-300 md:w-full"
+        >
+          <LogOut className="h-5 w-5" />
           Logout
         </button>
-      </nav>
+      </div>
     </aside>
   );
 };
