@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart",
+    "orders": "My Orders",
+    "login": "Login",
+    "admin": "Admin"
+  },
+  "home": {
+    "slogan": "Your trusted local kirana store in Pokhara — fresh, fast, and easy.",
+    "popular": "Popular Items",
+    "offers": "Today's Offers",
+    "categories": "Shop by Category",
+    "all": "All Products",
+    "open": "We are open",
+    "closed": "Shop is closed"
+  },
+  "cart": {
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "product": {
+    "add": "Add",
+    "stockLow": "Only {{count}} left",
+    "search": "Search groceries",
+    "sort": "Sort"
+  },
+  "checkout": {
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "review": "Review",
+    "placeOrder": "Place order",
+    "pickup": "Pickup from shop",
+    "homeDelivery": "Home delivery"
+  },
+  "order": {
+    "status_pending": "Pending",
+    "status_preparing": "Preparing",
+    "status_on_the_way": "On the way",
+    "status_delivered": "Delivered",
+    "status_cancelled": "Cancelled"
+  }
+}

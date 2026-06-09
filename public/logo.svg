@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Abhishek Kirana Pasal logo</title>
+  <rect width="512" height="512" rx="96" fill="#f97316"/>
+  <path d="M126 216c0-62 51-113 113-113h34c62 0 113 51 113 113v178H126V216Z" fill="#fff7ed"/>
+  <path d="M160 217c0-43 35-79 79-79h34c44 0 79 36 79 79v36H160v-36Z" fill="#dc143c"/>
+  <path d="M174 282h164v76H174z" fill="#003893"/>
+  <path d="M199 319h114" stroke="#fff7ed" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="214" cy="217" r="18" fill="#fff7ed"/>
+  <circle cx="298" cy="217" r="18" fill="#fff7ed"/>
+</svg>

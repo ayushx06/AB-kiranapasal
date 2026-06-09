@@ -1,0 +1,12 @@
+{
+  "name": "Abhishek Kirana Pasal",
+  "short_name": "Kirana Pasal",
+  "description": "Your trusted local kirana store in Pokhara.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#f97316",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

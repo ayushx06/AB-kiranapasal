@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "गृहपृष्ठ",
+    "products": "सामान",
+    "cart": "कार्ट",
+    "orders": "मेरो अर्डर",
+    "login": "लगइन",
+    "admin": "एडमिन"
+  },
+  "home": {
+    "slogan": "पोखराको भरपर्दो स्थानीय किराना पसल — ताजा, छिटो र सजिलो।",
+    "popular": "लोकप्रिय सामान",
+    "offers": "आजका अफर",
+    "categories": "श्रेणीअनुसार किनमेल",
+    "all": "सबै सामान",
+    "open": "हामी खुला छौं",
+    "closed": "पसल बन्द छ"
+  },
+  "cart": {
+    "empty": "तपाईंको कार्ट खाली छ",
+    "total": "जम्मा",
+    "checkout": "चेकआउटमा जानुहोस्"
+  },
+  "product": {
+    "add": "थप्नुहोस्",
+    "stockLow": "{{count}} मात्र बाँकी",
+    "search": "किराना खोज्नुहोस्",
+    "sort": "क्रम मिलाउनुहोस्"
+  },
+  "checkout": {
+    "delivery": "डेलिभरी",
+    "payment": "भुक्तानी",
+    "review": "समीक्षा",
+    "placeOrder": "अर्डर गर्नुहोस्",
+    "pickup": "पसलबाट लिनुहोस्",
+    "homeDelivery": "घरमै डेलिभरी"
+  },
+  "order": {
+    "status_pending": "पेन्डिङ",
+    "status_preparing": "तयारी हुँदै",
+    "status_on_the_way": "बाटोमा",
+    "status_delivered": "डेलिभर भयो",
+    "status_cancelled": "रद्द भयो"
+  }
+}
