@@ -35,7 +35,7 @@ export const OrderDetailPage = () => {
           ))}
         </div>
         <div className="mt-6 space-y-3">
-          {order.items.map((item) => (
+          {(order.items ?? []).map((item) => (
             <div key={item.productId} className="flex justify-between border-b border-slate-100 pb-2">
               <span>{item.name} x {item.quantity}</span>
               <span>{formatCurrency(item.price * item.quantity, language)}</span>

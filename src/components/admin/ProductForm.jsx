@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { CATEGORIES } from '../../utils/constants';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { uploadImage } from '../../services/cloudinary';
 
 export const ProductForm = ({ product, onSubmit, onCancel }) => {
+  const [newImageUrl, setNewImageUrl] = useState('');
   const { register, handleSubmit, setValue, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {
       name: product?.name || '',
@@ -27,16 +27,11 @@ export const ProductForm = ({ product, onSubmit, onCancel }) => {
   });
   const images = watch('images') || [];
 
-  const upload = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      const url = await uploadImage(file);
-      setValue('images', [...images, url]);
-      toast.success('Image uploaded');
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const addImage = () => {
+    const trimmed = newImageUrl.trim();
+    if (!trimmed) return;
+    setValue('images', [...images, trimmed]);
+    setNewImageUrl('');
   };
 
   const submit = (values) => onSubmit({
@@ -81,15 +76,42 @@ export const ProductForm = ({ product, onSubmit, onCancel }) => {
         <Input label="Discount %" type="number" {...register('discountPercent')} />
         <Input label="Low stock threshold" type="number" {...register('lowStockThreshold')} />
       </div>
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">Images</span>
-        <input className="block w-full rounded-lg border border-dashed border-slate-300 p-3 text-sm" type="file" accept="image/*" onChange={upload} />
-      </label>
-      {!!images.length && (
-        <div className="flex gap-2 overflow-x-auto">
-          {images.map((image) => <img key={image} className="h-20 w-20 rounded-lg object-cover" src={image} alt="" />)}
+      <div>
+        <span className="mb-1 block text-sm font-medium text-slate-700">Image URL</span>
+        <div className="flex gap-2">
+          <input
+            type="url"
+            placeholder="https://res.cloudinary.com/your-cloud/image/upload/..."
+            className="h-11 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+            value={newImageUrl}
+            onChange={(e) => setNewImageUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { e.preventDefault(); addImage(); }
+            }}
+          />
+          <button
+            type="button"
+            onClick={addImage}
+            className="h-11 rounded-lg bg-brand-500 px-4 text-sm font-semibold text-white hover:bg-brand-600"
+          >
+            Add
+          </button>
         </div>
-      )}
+        {images.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {images.map((url, i) => (
+              <div key={i} className="relative">
+                <img src={url} className="h-20 w-20 rounded-lg object-cover border border-slate-200" alt="" />
+                <button
+                  type="button"
+                  onClick={() => setValue('images', images.filter((_, j) => j !== i))}
+                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold"
+                >×</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="flex flex-wrap gap-4">
         {['isPopular', 'isFeatured', 'isActive'].map((field) => (
           <label key={field} className="flex items-center gap-2 text-sm font-semibold text-slate-700">

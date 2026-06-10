@@ -75,6 +75,17 @@ export const DashboardPage = () => {
   const today = new Date().toDateString();
   const todayOrders = orders.filter((order) => toDate(order.createdAt)?.toDateString() === today);
   const todayRevenue = todayOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toDateString();
+  const yesterdayOrders = orders.filter((order) => toDate(order.createdAt)?.toDateString() === yesterdayStr);
+  const yesterdayRevenue = yesterdayOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const ordersChange = yesterdayOrders.length
+    ? Math.round(((todayOrders.length - yesterdayOrders.length) / yesterdayOrders.length) * 100)
+    : 0;
+  const revenueChange = yesterdayRevenue
+    ? Math.round(((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100)
+    : 0;
   const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
   const pendingOrders = orders.filter((order) => order.orderStatus === 'pending');
   const lowStock = products.filter((product) => Number(product.stock) <= Number(product.lowStockThreshold || 5));
@@ -123,10 +134,10 @@ export const DashboardPage = () => {
       </div>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <LuxuryStatCard icon={ShoppingBag} label="Today's Orders" value={todayOrders.length} change={12} color="bg-brand-500" />
-        <LuxuryStatCard icon={Banknote} label="Today's Revenue" value={formatCurrency(todayRevenue)} change={8} color="bg-emerald-500" />
-        <LuxuryStatCard icon={Users} label="Total Customers" value={customers.length} change={5} color="bg-violet-500" />
-        <LuxuryStatCard icon={PackageCheck} label="Pending Orders" value={pendingOrders.length} change={-3} color="bg-amber-500" />
+        <LuxuryStatCard icon={ShoppingBag} label="Today's Orders" value={todayOrders.length} change={ordersChange} color="bg-brand-500" />
+        <LuxuryStatCard icon={Banknote} label="Today's Revenue" value={formatCurrency(todayRevenue)} change={revenueChange} color="bg-emerald-500" />
+        <LuxuryStatCard icon={Users} label="Total Customers" value={customers.length} color="bg-violet-500" />
+        <LuxuryStatCard icon={PackageCheck} label="Pending Orders" value={pendingOrders.length} color="bg-amber-500" />
       </div>
 
       <div className="mb-8 rounded-2xl bg-gradient-to-r from-brand-500 to-orange-400 p-6 text-white shadow-lg shadow-brand-200">

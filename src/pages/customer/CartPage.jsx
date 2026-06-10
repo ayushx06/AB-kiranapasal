@@ -24,7 +24,7 @@ export const CartPage = () => {
       <div className="space-y-3">
         {items.map((item) => (
           <div key={item.productId} className="flex gap-3 rounded-lg bg-white p-3 shadow-sm">
-            <img className="h-20 w-20 rounded-lg object-cover" src={item.imageUrl} alt={item.name} />
+            <img className="h-20 w-20 rounded-lg object-cover" src={item.imageUrl || '/placeholder.png'} alt={item.name} />
             <div className="flex-1">
               <div className="font-bold">{language === 'ne' ? item.nameNe : item.name}</div>
               <div className="text-sm text-slate-500">{formatCurrency(item.price, language)}</div>

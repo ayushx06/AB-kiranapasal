@@ -10,6 +10,8 @@ export const LoginPage = () => {
   const [name, setName] = useState('');
   const [otp, setOtp] = useState('');
 
+  const resetOtp = () => useAuthStore.setState({ confirmationResult: null, pendingName: '' });
+
   const submitPhone = async (event) => {
     event.preventDefault();
     await loginWithPhone(phone, name);
@@ -122,7 +124,7 @@ export const LoginPage = () => {
 
               <button
                 type="button"
-                onClick={() => window.location.reload()}
+                onClick={resetOtp}
                 className="w-full text-sm font-semibold text-slate-500 transition-colors hover:text-brand-600"
               >
                 Wrong number? Go back

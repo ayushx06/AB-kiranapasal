@@ -10,8 +10,11 @@ export const useOrders = (customerId, { admin = false } = {}) => {
     if (!customerId && !admin) return undefined;
     setLoading(true);
     try {
-      const unsubscribe = admin ? listenAllOrders(setOrders) : listenCustomerOrders(customerId, setOrders);
-      setLoading(false);
+      const handler = (data) => {
+        setOrders(data);
+        setLoading(false);
+      };
+      const unsubscribe = admin ? listenAllOrders(handler) : listenCustomerOrders(customerId, handler);
       return unsubscribe;
     } catch (error) {
       toast.error(error.message);

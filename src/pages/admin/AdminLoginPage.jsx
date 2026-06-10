@@ -6,13 +6,17 @@ import { useAuthStore } from '../../store/authStore';
 export const AdminLoginPage = () => {
   const navigate = useNavigate();
   const { loginAdmin, loading } = useAuthStore();
-  const [email, setEmail] = useState(import.meta.env.VITE_ADMIN_EMAIL || '');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const submit = async (event) => {
     event.preventDefault();
-    await loginAdmin(email, password);
-    navigate('/admin');
+    try {
+      await loginAdmin(email, password);
+      navigate('/admin');
+    } catch {
+      // error already toasted by the store
+    }
   };
 
   return (

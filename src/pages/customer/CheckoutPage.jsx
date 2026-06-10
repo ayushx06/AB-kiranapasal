@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Button } from '../../components/ui/Button';
@@ -24,6 +24,7 @@ export const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [zoneId, setZoneId] = useState('');
   const [address, setAddress] = useState({ fullName: '', phone: '', street: '', landmark: '', city: 'Pokhara' });
+  const orderIdRef = useRef(makeOrderId());
 
   useEffect(() => listenShopSettings(setSettings), []);
   useEffect(() => { fetchDeliveryZones().then(setZones); }, []);
@@ -34,7 +35,7 @@ export const CheckoutPage = () => {
   const canOrder = items.length && total >= Number(settings.minOrderAmount || 0);
 
   const orderPreview = useMemo(() => ({
-    id: makeOrderId(),
+    id: orderIdRef.current,
     customerId: user?.uid || 'guest',
     customerPhone: user?.phoneNumber || address.phone,
     customerName: address.fullName || 'Customer',
@@ -44,7 +45,7 @@ export const CheckoutPage = () => {
     discount: 0,
     total,
     paymentMethod,
-    paymentStatus: paymentMethod === 'cod' ? 'pending' : 'pending',
+    paymentStatus: paymentMethod === 'cod' ? 'pending' : 'awaiting_verification',
     deliveryType,
     deliveryAddress: deliveryType === 'home_delivery' ? { ...address, distanceKm: selectedZone?.distanceKm || 0 } : null,
     orderStatus: 'pending',

@@ -42,9 +42,9 @@ export const sendPhoneOtp = async (phone) => {
   return signInWithPhoneNumber(auth, normalizeNepalPhone(phone), verifier);
 };
 
-export const verifyPhoneOtp = async (confirmationResult, code) => {
+export const verifyPhoneOtp = async (confirmationResult, code, extra = {}) => {
   const result = await confirmationResult.confirm(code);
-  await ensureCustomerProfile(result.user);
+  await ensureCustomerProfile(result.user, extra);
   return result.user;
 };
 
